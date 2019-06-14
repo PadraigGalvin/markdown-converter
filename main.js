@@ -38,19 +38,19 @@ const rules = [
   // Heading 1 - single hash
   {
     // Match exactly one hash with optional trailing hashes and whitespace
-    pattern: /^\#(?!\#)\s*(.+?)\s*(?:\#+)?\s*$/gm,
+    pattern: /^\#(?!\#)[ \t]*(.+?)[ \t]*(?:\#+)?[ \t]*$/gm,
     html: '<h1>$1</h1>',
   },
   // Heading 2 - double hash
   {
     // Match exactly two hashes with optional trailing hashes and whitespace
-    pattern: /^\#{2}(?!\#)\s*(.+?)\s*(?:\#+)?\s*$/gm,
+    pattern: /^\#{2}(?!\#)[ \t]*(.+?)[ \t]*(?:\#+)?[ \t]*$/gm,
     html: '<h2>$1</h2>',
   },
   // Heading 3 - triple hash
   {
     // Match exactly three hashes with optional trailing hashes and whitespace
-    pattern: /^\#{3}(?!\#)\s*(.+?)\s*(?:\#+)?\s*$/gm,
+    pattern: /^\#{3}(?!\#)[ \t]*(.+?)[ \t]*(?:\#+)?[ \t]*$/gm,
     html: '<h3>$1</h3>',
   },
   // Paragraph - double newline
@@ -82,6 +82,9 @@ function render(markdown, format) {
   if (format !== FORMAT_HTML) {
     throw new Error('Unable to render unknown format');
   }
+
+  // Results should contain at least one paragraph
+  markdown += '\n\n';
 
   // Recursively apply each rule to content
   return rules.reduce((content, rule) => {
