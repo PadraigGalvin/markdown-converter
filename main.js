@@ -37,26 +37,19 @@ const rules = [
     html: '<em>$1</em>',
     wiki: "''$1''",
   },
-  // Heading 1 - single hash
+  // Heading 1 to 6 - hashes on own line
   {
-    // Match exactly one hash with optional trailing hashes and whitespace
-    pattern: /^\#(?!\#)[ \t]*(.+?)[ \t]*(?:\#+)?[ \t]*$/gm,
-    html: '\n<h1>$1</h1>\n', // newlines ensures seperation from paragraphs
-    wiki: '= $1 =',
-  },
-  // Heading 2 - double hash
-  {
-    // Match exactly two hashes with optional trailing hashes and whitespace
-    pattern: /^\#{2}(?!\#)[ \t]*(.+?)[ \t]*(?:\#+)?[ \t]*$/gm,
-    html: '\n<h2>$1</h2>\n', // newlines ensures seperation from paragraphs
-    wiki: '== $1 ==',
-  },
-  // Heading 3 - triple hash
-  {
-    // Match exactly three hashes with optional trailing hashes and whitespace
-    pattern: /^\#{3}(?!\#)[ \t]*(.+?)[ \t]*(?:\#+)?[ \t]*$/gm,
-    html: '\n<h3>$1</h3>\n', // newlines ensures seperation from paragraphs
-    wiki: '=== $1 ===',
+    // Match one to six hashes with optional trailing hashes and whitespace
+    pattern: /^(\#{1,6})(?!\#)[ \t]*(.+?)[ \t]*(?:\#+)?[ \t]*$/gm,
+    html: (match, hashes, text) => {
+      const level = hashes.length;
+      // Newlines ensures seperation from paragraphs
+      return `\n<h${level}>${text}</h${level}>\n`;
+    },
+    wiki: (match, hashes, text) => {
+      const tag = '='.repeat(hashes.length);
+      return `${tag} ${text} ${tag}`;
+    },
   },
   // Paragraph - double newline
   {
