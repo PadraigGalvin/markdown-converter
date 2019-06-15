@@ -9,33 +9,19 @@
  * so pattern can be string or regex and render can be string or function.
  */
 const rules = [
-  // Strong text - double underscore
+  // Strong text - double underscores or stars
   {
-    // Match anything wrapped by double underscores
-    pattern: /__(.+?)__/gm,
-    html: '<strong>$1</strong>',
-    wiki: "'''$1'''",
+    // Match anything wrapped by double underscores or stars
+    pattern: /(__|\*\*)(.+?)\1/gm,
+    html: '<strong>$2</strong>',
+    wiki: "'''$2'''",
   },
-  // Strong text - double stars
+  // Emphasized text - single underscores or stars
   {
-    // Match anything wrapped by double stars
-    pattern: /\*\*(.+?)\*\*/gm,
-    html: '<strong>$1</strong>',
-    wiki: "'''$1'''",
-  },
-  // Emphasized text - single underscores
-  {
-    // Match anything wrapped by single underscores
-    pattern: /_(.+?)_/gm,
-    html: '<em>$1</em>',
-    wiki: "''$1''",
-  },
-  // Emphasized text - single stars
-  {
-    // Match anything wrapped by single stars
-    pattern: /\*(.+?)\*/gm,
-    html: '<em>$1</em>',
-    wiki: "''$1''",
+    // Match anything wrapped by single underscores or stars
+    pattern: /(_|\*)(.+?)\1/gm,
+    html: '<em>$2</em>',
+    wiki: "''$2''",
   },
   // Heading 1 to 6 - hashes on own line
   {
