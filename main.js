@@ -41,27 +41,33 @@ const rules = [
   {
     // Match exactly one hash with optional trailing hashes and whitespace
     pattern: /^\#(?!\#)[ \t]*(.+?)[ \t]*(?:\#+)?[ \t]*$/gm,
-    html: '<h1>$1</h1>',
+    html: '\n<h1>$1</h1>\n', // newlines ensures seperation from paragraphs
     wiki: '= $1 =',
   },
   // Heading 2 - double hash
   {
     // Match exactly two hashes with optional trailing hashes and whitespace
     pattern: /^\#{2}(?!\#)[ \t]*(.+?)[ \t]*(?:\#+)?[ \t]*$/gm,
-    html: '<h2>$1</h2>',
+    html: '\n<h2>$1</h2>\n', // newlines ensures seperation from paragraphs
     wiki: '== $1 ==',
   },
   // Heading 3 - triple hash
   {
     // Match exactly three hashes with optional trailing hashes and whitespace
     pattern: /^\#{3}(?!\#)[ \t]*(.+?)[ \t]*(?:\#+)?[ \t]*$/gm,
-    html: '<h3>$1</h3>',
+    html: '\n<h3>$1</h3>\n', // newlines ensures seperation from paragraphs
     wiki: '=== $1 ===',
   },
   // Paragraph - double newline
   {
-    pattern: /(.*?)(?:(\r|\r?\n){2})/gs,
-    html: '<p>$1</p>',
+    pattern: /\s*(.*?)\s*(?:(\r|\r?\n){2})/gs,
+    html: (match, p1) => {
+      // Don't wrap headers in paragraphs (invalid HTML)
+      if (/^(?:<h\d>)(.*)(?:<\/h\d>)$/.test(p1)) {
+        return p1;
+      }
+      return `<p>${p1}</p>`;
+    },
     wiki: '$1\n\n',
   },
 ];
